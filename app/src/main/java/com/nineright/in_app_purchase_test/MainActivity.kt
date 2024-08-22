@@ -114,6 +114,10 @@ class MainActivity : AppCompatActivity() {
         // Ensure entitlement was not already granted for this purchaseToken.
         // Grant entitlement to the user.
 
+        if (!validateReceipt()) {
+            return
+        }
+
         val consumeParams =
             ConsumeParams.newBuilder()
                 .setPurchaseToken(purchase!!.getPurchaseToken())
@@ -243,5 +247,20 @@ class MainActivity : AppCompatActivity() {
 
     fun launchItem4BillingFlow(view: View) {
         launchBillingFlow(3)
+    }
+
+    private fun validateReceipt(): Boolean {
+        var ret = false
+        ApiCall(this.logger).validateReceipt(this) { isValidationSucceeded ->
+            if (isValidationSucceeded.result) {
+                this.logger.log("Receipt validation is successful")
+                ret = true
+            } else {
+                this.logger.err("Receipt validation is not successful")
+            }
+
+        }
+
+        return ret
     }
 }
