@@ -94,6 +94,8 @@ class MainActivity : AppCompatActivity() {
     private val purchaseResponseListener = PurchasesResponseListener {billingResult, purchases -> }
 
     private val purchasesUpdatedListener = PurchasesUpdatedListener { billingResult, purchases ->
+        this.logger.log("billingResult=${billingResult.toString()}")
+        this.logger.log("purchases=$purchases")
         if (billingResult.responseCode == BillingClient.BillingResponseCode.OK && purchases != null) {
             for (purchase in purchases) {
                 lifecycleScope.launch {
@@ -114,19 +116,19 @@ class MainActivity : AppCompatActivity() {
         // Ensure entitlement was not already granted for this purchaseToken.
         // Grant entitlement to the user.
 
-        if (!validateReceipt()) {
-            return
-        }
+//        if (!validateReceipt()) {
+//            return
+//        }
 
-        val consumeParams =
-            ConsumeParams.newBuilder()
-                .setPurchaseToken(purchase!!.getPurchaseToken())
-                .build()
-        val consumeResult = withContext(Dispatchers.IO) {
-            billingClient.consumePurchase(consumeParams)
-        }
-
-        this.logger.log("consumeResult=$consumeResult")
+//        val consumeParams =
+//            ConsumeParams.newBuilder()
+//                .setPurchaseToken(purchase!!.getPurchaseToken())
+//                .build()
+//        val consumeResult = withContext(Dispatchers.IO) {
+//            billingClient.consumePurchase(consumeParams)
+//        }
+//
+//        this.logger.log("consumeResult=$consumeResult")
     }
 
     private suspend fun handleNonConsumablePurchase(purchase: Purchase?) {
